@@ -1,0 +1,24 @@
+{
+    "name": "ziptastic/ziptastic",
+    "description": "PHP SDK for the Ziptastic Lookup API",
+    "require": {
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.4",
+        "phpunit/phpunit": "^5.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "John Pedrie",
+            "email": "John@Pedrie.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ziptastic\\": "src"
+        }
+    },
+    "minimum-stability": "stable"
+}
