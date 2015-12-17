@@ -5,8 +5,7 @@
         "php": ">=5.4"
     },
     "require-dev": {
-        "mockery/mockery": "^0.9.4",
-        "phpunit/phpunit": "^5.0"
+        "phpunit/phpunit": "~4.0"
     },
     "license": "MIT",
     "authors": [
@@ -17,7 +16,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Ziptastic\\": "src"
+            "Ziptastic\\Ziptastic\\": "src"
         }
     },
     "minimum-stability": "stable"

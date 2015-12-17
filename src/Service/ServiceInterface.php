@@ -1,4 +1,4 @@
-<?php namespace Ziptastic\Service;
+<?php namespace Ziptastic\Ziptastic\Service;
 
 interface ServiceInterface
 {

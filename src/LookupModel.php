@@ -1,4 +1,4 @@
-<?php namespace Ziptastic;
+<?php namespace Ziptastic\Ziptastic;
 
 use DateTimeZone;
 
@@ -58,7 +58,7 @@ class LookupModel
         $this->longitude = (isset($lookup['longitude'])) ? $lookup['longitude'] : null;
         $tz = (isset($lookup['timezone'])) ? $lookup['timezone'] : null;
         if (!is_null($tz)) {
-            $this->tz = new DateTimeZone($tz);
+            $this->timezone = new DateTimeZone($tz);
         }
     }
 

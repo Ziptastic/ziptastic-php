@@ -1,9 +1,9 @@
-<?php namespace Ziptastic;
+<?php namespace Ziptastic\Ziptastic;
 
-use Ziptastic\Service\CurlService;
-use Ziptastic\Service\ServiceInterface;
+use Ziptastic\Ziptastic\Service\CurlService;
+use Ziptastic\Ziptastic\Service\ServiceInterface;
 
-class Ziptastic
+class Lookup
 {
     const ZIPTASTIC_LOOKUP_URL = 'https://zip.getziptastic.com/v3/%s/%d';
 
@@ -48,7 +48,7 @@ class Ziptastic
     public function lookup($zipCode)
     {
         $url = sprintf(self::ZIPTASTIC_LOOKUP_URL, $this->countryCode, $zipCode);
-        $this->service->get($url, $this->apiKey);
+        $res = $this->service->get($url, $this->apiKey);
 
         $collection = [];
         foreach ($res as $result) {
