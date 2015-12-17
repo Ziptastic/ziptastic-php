@@ -49,16 +49,16 @@ class LookupModel
      */
     public function __construct(array $lookup)
     {
-        $this->county = (isset($lookup['county'])) ? $lookup['county'] : null;
-        $this->city = (isset($lookup['city'])) ? $lookup['city'] : null;
-        $this->state = (isset($lookup['state'])) ? $lookup['state'] : null;
-        $this->stateShort = (isset($lookup['state_short'])) ? $lookup['state_short'] : null;
-        $this->postalCode = (isset($lookup['postal_code'])) ? $lookup['postal_code'] : null;
-        $this->latitude = (isset($lookup['latitude'])) ? $lookup['latitude'] : null;
-        $this->longitude = (isset($lookup['longitude'])) ? $lookup['longitude'] : null;
-        $tz = (isset($lookup['timezone'])) ? $lookup['timezone'] : null;
-        if (!is_null($tz)) {
-            $this->timezone = new DateTimeZone($tz);
+        $this->county = $this->getOrNull('county', $lookup);
+        $this->city = $this->getOrNull('city', $lookup);
+        $this->state = $this->getOrNull('state', $lookup);
+        $this->stateShort = $this->getOrNull('state_short', $lookup);
+        $this->postalCode = $this->getOrNull('postal_code', $lookup);
+        $this->latitude = $this->getOrNull('latitude', $lookup);
+        $this->longitude = $this->getOrNull('longitude', $lookup);
+        $timezone = $this->getOrNull('timezone', $lookup);
+        if (!is_null($timezone)) {
+            $this->timezone = new DateTimeZone($timezone);
         }
     }
 
@@ -124,5 +124,10 @@ class LookupModel
     public function timezone()
     {
         return $this->timezone;
+    }
+
+    private function getOrNull($key, array $data)
+    {
+        return (isset($data[$key])) ? $data[$key] : null;
     }
 }

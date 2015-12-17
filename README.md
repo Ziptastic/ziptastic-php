@@ -1,5 +1,7 @@
 # Ziptastic PHP
 
+[![Build Status](https://travis-ci.org/Ziptastic/ziptastic-php.svg)](https://travis-ci.org/Ziptastic/ziptastic-php) [![Code Climate](https://codeclimate.com/github/Ziptastic/ziptastic-php/badges/gpa.svg)](https://codeclimate.com/github/Ziptastic/ziptastic-php) [![Test Coverage](https://codeclimate.com/github/Ziptastic/ziptastic-php/badges/coverage.svg)](https://codeclimate.com/github/Ziptastic/ziptastic-php/coverage)
+
 This library is a simple interface for the [Ziptastic API](https://www.getziptastic.com/).
 
 Using Ziptastic requires an API key.

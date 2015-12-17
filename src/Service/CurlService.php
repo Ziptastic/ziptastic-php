@@ -6,18 +6,18 @@ class CurlService implements ServiceInterface
 {
     public function get($url, $apiKey)
     {
-        $ch = $this->curl_init();
-        $this->curl_setopt($ch, CURLOPT_URL, $url);
-        $this->curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $this->curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        $handle = $this->curl_init();
+        $this->curl_setopt($handle, CURLOPT_URL, $url);
+        $this->curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        $this->curl_setopt($handle, CURLOPT_HTTPHEADER, [
             sprintf("x-key: %s", $apiKey)
         ]);
 
-        $response = $this->curl_exec($ch);
+        $response = $this->curl_exec($handle);
 
         $res = json_decode(trim($response), true);
-        $statusCode = $this->curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->curl_close($ch);
+        $statusCode = $this->curl_getinfo($handle, CURLINFO_HTTP_CODE);
+        $this->curl_close($handle);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new Exception('Could not parse response as json');
@@ -38,6 +38,7 @@ class CurlService implements ServiceInterface
 
     /**
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD)
      */
     protected function curl_init()
     {
@@ -46,33 +47,37 @@ class CurlService implements ServiceInterface
 
     /**
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD)
      */
-    protected function curl_setopt($ch, $name, $opt)
+    protected function curl_setopt($handle, $name, $opt)
     {
-        return curl_setopt($ch, $name, $opt);
+        return curl_setopt($handle, $name, $opt);
     }
 
     /**
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD)
      */
-    protected function curl_getinfo($ch, $name)
+    protected function curl_getinfo($handle, $name)
     {
-        return curl_getinfo($ch, $name);
+        return curl_getinfo($handle, $name);
     }
 
     /**
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD)
      */
-    protected function curl_exec($ch)
+    protected function curl_exec($handle)
     {
-        return curl_exec($ch);
+        return curl_exec($handle);
     }
 
     /**
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD)
      */
-    protected function curl_close($ch)
+    protected function curl_close($handle)
     {
-        return curl_close($ch);
+        return curl_close($handle);
     }
 }
