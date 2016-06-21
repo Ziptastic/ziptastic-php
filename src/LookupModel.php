@@ -25,7 +25,7 @@ class LookupModel
     private $stateShort;
 
     /**
-     * @var int
+     * @var int|string
      */
     private $postalCode;
 
@@ -95,7 +95,7 @@ class LookupModel
     }
 
     /**
-     * @return int
+     * @return int|string
      */
     public function postalCode()
     {
