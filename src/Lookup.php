@@ -42,7 +42,7 @@ class Lookup
 
     /**
      * Get information on given $zipCode
-     * @param  int|string         $zipCode
+     * @param  string           $zipCode
      * @return array[LookupModel]
      */
     public function lookup($zipCode)
