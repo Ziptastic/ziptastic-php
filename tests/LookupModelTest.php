@@ -43,4 +43,24 @@ class LookupModelTest extends PHPUnit_Framework_TestCase
         $this->assertNull($model->longitude());
         $this->assertNull($model->timezone());
     }
+
+    public function testInvalidTimezoneReturnsNull()
+    {
+        // as of 6/21/17, searching zipcode 59018 returns timezone 'n/a'
+        // this results in a warning at runtime because
+        // the lookup model expected null or a valid timezone only
+        $data = [
+            'county' => 'Park',
+            'city' => 'Clyde Park',
+            'state' => 'Michigan',
+            'state_short' => 'MT',
+            'postal_code' => '59018',
+            'latitude' => 45.8341,
+            'longitude' => -110.6222,
+            'timezone' => 'n/a'
+        ];
+
+        $model = new LookupModel($data);
+        $this->assertNull($model->timezone());
+    }
 }

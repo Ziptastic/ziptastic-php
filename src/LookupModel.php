@@ -57,7 +57,7 @@ class LookupModel
         $this->latitude = $this->getOrNull('latitude', $lookup);
         $this->longitude = $this->getOrNull('longitude', $lookup);
         $timezone = $this->getOrNull('timezone', $lookup);
-        if (!is_null($timezone)) {
+        if (!is_null($timezone) && in_array($timezone, timezone_identifiers_list())) {
             $this->timezone = new DateTimeZone($timezone);
         }
     }
