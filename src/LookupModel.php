@@ -1,133 +1,91 @@
-<?php namespace Ziptastic\Ziptastic;
+<?php
 
-use DateTimeZone;
+namespace Ziptastic\Ziptastic;
 
 class LookupModel
 {
     /**
-     * @var string
-     */
-    private $county;
-
-    /**
-     * @var string
-     */
-    private $city;
-
-    /**
-     * @var string
-     */
-    private $state;
-
-    /**
-     * @var string
-     */
-    private $stateShort;
-
-    /**
-     * @var string
-     */
-    private $postalCode;
-
-    /**
-     * @var float
-     */
-    private $latitude;
-
-    /**
-     * @var float
-     */
-    private $longitude;
-
-    /**
-     * @var DateTimeZone
-     */
-    private $timezone;
-
-    /**
      * @param  array
      */
-    public function __construct(array $lookup)
+    public function __construct(array $data)
     {
-        $this->county = $this->getOrNull('county', $lookup);
-        $this->city = $this->getOrNull('city', $lookup);
-        $this->state = $this->getOrNull('state', $lookup);
-        $this->stateShort = $this->getOrNull('state_short', $lookup);
-        $this->postalCode = $this->getOrNull('postal_code', $lookup);
-        $this->latitude = $this->getOrNull('latitude', $lookup);
-        $this->longitude = $this->getOrNull('longitude', $lookup);
-        $timezone = $this->getOrNull('timezone', $lookup);
-        if (!is_null($timezone)) {
-            $this->timezone = new DateTimeZone($timezone);
+        $this->data = $data + [
+            'county' => null,
+            'city' => null,
+            'state' => null,
+            'state_short' => null,
+            'postal_code' => null,
+            'latitude' => null,
+            'longitude' => null,
+            'timezone' => null,
+        ];
+
+        if ($this->data['timezone']) {
+            $this->data['timezone'] = new \DateTimeZone($this->data['timezone']);
         }
     }
 
     /**
      * @return string
      */
-    public function county()
+    public function county(): ?string
     {
-        return $this->county;
+        return $this->data['county'];
     }
 
     /**
      * @return string
      */
-    public function city()
+    public function city(): ?string
     {
-        return $this->city;
+        return $this->data['city'];
     }
 
     /**
      * @return string
      */
-    public function state()
+    public function state(): ?string
     {
-        return $this->state;
+        return $this->data['state'];
     }
 
     /**
      * @return string
      */
-    public function stateShort()
+    public function stateShort(): ?string
     {
-        return $this->stateShort;
+        return $this->data['state_short'];
     }
 
     /**
      * @return string
      */
-    public function postalCode()
+    public function postalCode(): ?string
     {
-        return $this->postalCode;
+        return $this->data['postal_code'];
     }
 
     /**
      * @return float
      */
-    public function latitude()
+    public function latitude(): ?float
     {
-        return $this->latitude;
+        return $this->data['latitude'];
     }
 
     /**
      * @return float
      */
-    public function longitude()
+    public function longitude(): ?float
     {
-        return $this->longitude;
+        return $this->data['longitude'];
     }
 
     /**
-     * @return DateTimeZone
+     * @return \DateTimeZone
      */
-    public function timezone()
+    public function timezone(): ?\DateTimeZone
     {
-        return $this->timezone;
-    }
-
-    private function getOrNull($key, array $data)
-    {
-        return (isset($data[$key])) ? $data[$key] : null;
+        return $this->data['timezone'];
     }
 }

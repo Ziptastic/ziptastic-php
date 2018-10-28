@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Ziptastic\Ziptastic\LookupModel;
 
-class LookupModelTest extends PHPUnit_Framework_TestCase
+class LookupModelTest extends TestCase
 {
     public function testConstructor()
     {
@@ -27,7 +28,7 @@ class LookupModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($model->latitude(), $data['latitude']);
         $this->assertEquals($model->longitude(), $data['longitude']);
 
-        $this->assertInstanceOf('DateTimeZone', $model->timezone());
+        $this->assertInstanceOf(\DateTimeZone::class, $model->timezone());
         $this->assertEquals($model->timezone()->getName(), 'America/Detroit');
     }
 

@@ -1,8 +1,10 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Ziptastic\Ziptastic\Lookup;
+use Ziptastic\Ziptastic\Service\ServiceInterface;
 
-class LookupTest extends PHPUnit_Framework_TestCase
+class LookupTest extends TestCase
 {
     private $stub = [
         'county' => 'Macomb',
@@ -49,11 +51,11 @@ class LookupTest extends PHPUnit_Framework_TestCase
     public function testStatic()
     {
         $lookup = Lookup::create('123');
-        $this->assertInstanceOf('Ziptastic\\Ziptastic\\Lookup', $lookup);
+        $this->assertInstanceOf(Lookup::class, $lookup);
     }
 }
 
-class servicestub implements Ziptastic\Ziptastic\Service\ServiceInterface
+class servicestub implements ServiceInterface
 {
     private $res;
 

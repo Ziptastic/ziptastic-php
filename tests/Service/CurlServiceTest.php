@@ -1,6 +1,9 @@
 <?php
 
-class CurlServiceTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+use Ziptastic\Ziptastic\Exception;
+
+class CurlServiceTest extends TestCase
 {
     public function testGet()
     {
@@ -20,8 +23,8 @@ class CurlServiceTest extends PHPUnit_Framework_TestCase
 
     public function testGetMalformed()
     {
-        $this->setExpectedException(
-            'Ziptastic\\Ziptastic\\Exception',
+        $this->expectException(
+            Exception::class,
             'Could not parse response as json'
         );
 
@@ -34,8 +37,8 @@ class CurlServiceTest extends PHPUnit_Framework_TestCase
 
     public function testGetInvalidStatusWithMessage()
     {
-        $this->setExpectedException(
-            'Ziptastic\\Ziptastic\\Exception',
+        $this->expectException(
+            Exception::class,
             'bad'
         );
 
@@ -48,8 +51,8 @@ class CurlServiceTest extends PHPUnit_Framework_TestCase
 
     public function testGetInvalidStatusWithoutMessage()
     {
-        $this->setExpectedException(
-            'Ziptastic\\Ziptastic\\Exception',
+        $this->expectException(
+            Exception::class,
             'An error occurred'
         );
 

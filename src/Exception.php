@@ -1,4 +1,6 @@
-<?php namespace Ziptastic\Ziptastic;
+<?php
+
+namespace Ziptastic\Ziptastic;
 
 class Exception extends \Exception
 {}
