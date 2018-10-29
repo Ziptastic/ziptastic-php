@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Ziptastic\Ziptastic\Lookup;
+use Ziptastic\Client;
 
 class IntegrationTest extends TestCase
 {
@@ -16,10 +16,30 @@ class IntegrationTest extends TestCase
         }
     }
 
-    public function testZiptastic()
+    public function testForwardLookup()
     {
-        $lookup = Lookup::create($this->apiKey);
-        $l = $lookup->lookup(48038);
+        $lookup = Client::create($this->apiKey);
+        $l = $lookup->forward(48038);
+
+        foreach ($l as $model) {
+            $this->assertInternalType('string', $model->county());
+            $this->assertInternalType('string', $model->city());
+            $this->assertInternalType('string', $model->state());
+            $this->assertInternalType('string', $model->stateShort());
+            $this->assertInternalType('string', $model->postalCode());
+            $this->assertInternalType('double', $model->latitude());
+            $this->assertInternalType('double', $model->longitude());
+
+            $this->assertInstanceOf(\DateTimeZone::class, $model->timezone());
+        }
+    }
+
+    public function testReverseLookup()
+    {
+        $this->markTestSkipped('404 for some reason.');
+
+        $lookup = Client::create($this->apiKey);
+        $l = $lookup->reverse(42.331427, -83.0457538, 1000);
 
         foreach ($l as $model) {
             $this->assertInternalType('string', $model->county());

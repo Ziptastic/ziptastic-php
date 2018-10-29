@@ -1,8 +1,11 @@
 <?php
 
-namespace Ziptastic\Ziptastic;
+namespace Ziptastic;
 
-class LookupModel
+/**
+ * Represents a Ziptastic API response item.
+ */
+class ResponseItem
 {
     /**
      * @param  array

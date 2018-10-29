@@ -1,6 +1,6 @@
-<?php namespace Ziptastic\Ziptastic\Service;
+<?php namespace Ziptastic\Service;
 
-use Ziptastic\Ziptastic\Exception;
+use Ziptastic\Exception;
 
 class CurlService implements ServiceInterface
 {
@@ -20,7 +20,10 @@ class CurlService implements ServiceInterface
         $this->curl_close($handle);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new Exception('Could not parse response as json');
+            throw new Exception(sprintf(
+                'Could not parse response as json. Reason: %s',
+                json_last_error_msg()
+            ));
         }
 
         if ($statusCode !== 200 && isset($res['message'])) {

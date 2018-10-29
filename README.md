@@ -18,36 +18,41 @@ composer require ziptastic/ziptastic
 
 The simplest usage defaults to the provided Curl service:
 
-````php
+```php
 <?php
 
 include "vendor/autoload.php";
 
-$z = Ziptastic\Ziptastic\Lookup::create(getenv('ZIPTASTIC_API_KEY'));
+use Ziptastic\Client;
 
-$result = $z->lookup(48038);
-
-?>
-````
+$z = Client::create(getenv('ZIPTASTIC_API_KEY'));
+```
 
 You can also use a normal instantiation technique:
 
-````php
+```php
 <?php
 
 include "vendor/autoload.php";
 
-$service = new Ziptastic\Ziptastic\Service\CurlService;
-$z = new Ziptastic\Ziptastic\Lookup($service, getenv('ZIPTASTIC_API_KEY'));
+use Ziptastic\Client;
+use Ziptastic\Service\CurlService;
 
-$result = $z->lookup(48038);
+$service = new Ziptastic\Service\CurlService;
+$z = new Client($service, getenv('ZIPTASTIC_API_KEY'));
+```
 
-?>
-````
+Ziptastic provides two API methods: Lookup by a postal code (forward lookup),
+and lookup by latitude and longitude (reverse lookup).
+
+```php
+$result = $z->forward(48038);
+$result = $z->reverse(42.331427, -83.0457538, 1000);
+```
 
 Results are returned as a collection of class LookupModel:
 
-````php
+```php
 <?php
 
 $lookup = current($result);
@@ -61,9 +66,11 @@ echo $lookup->longitude(); // -82.9195514
 
 // timezone() returns an instance of \DateTimeZone
 echo $lookup->timezone()->getName(); // America/Detroit
+```
 
-?>
-````
+### PHP 5
+
+If you require PHP 5 compatibility, please use Ziptastic-PHP version 1.
 
 ## License
 

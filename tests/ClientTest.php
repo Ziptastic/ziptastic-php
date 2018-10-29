@@ -1,10 +1,10 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Ziptastic\Ziptastic\Lookup;
-use Ziptastic\Ziptastic\Service\ServiceInterface;
+use Ziptastic\Client;
+use Ziptastic\Service\ServiceInterface;
 
-class LookupTest extends TestCase
+class ClientTest extends TestCase
 {
     private $stub = [
         'county' => 'Macomb',
@@ -17,7 +17,7 @@ class LookupTest extends TestCase
         'timezone' => 'America/Detroit'
     ];
 
-    public function testLookup()
+    public function testFormward()
     {
         $res = function() {
             return [$this->stub];
@@ -25,8 +25,23 @@ class LookupTest extends TestCase
 
         $service = new servicestub($res);
 
-        $lookup = new Lookup($service, '123');
-        $l = $lookup->lookup(48038);
+        $client = new Client($service, '123');
+        $l = $client->forward(48038);
+
+        $this->assertEquals(1, count($l));
+        $this->assertEquals($this->stub['city'], $l[0]->city());
+    }
+
+    public function testReverse()
+    {
+        $res = function() {
+            return [$this->stub];
+        };
+
+        $service = new servicestub($res);
+
+        $client = new Client($service, '123');
+        $l = $client->reverse(100.10, 200.20, 1);
 
         $this->assertEquals(1, count($l));
         $this->assertEquals($this->stub['city'], $l[0]->city());
@@ -40,8 +55,8 @@ class LookupTest extends TestCase
 
         $service = new servicestub($res);
 
-        $lookup = new Lookup($service, '123');
-        $l = $lookup->lookup(48038);
+        $client = new Client($service, '123');
+        $l = $client->forward(48038);
 
         $this->assertEquals(2, count($l));
         $this->assertEquals($this->stub['city'], $l[0]->city());
@@ -50,8 +65,8 @@ class LookupTest extends TestCase
 
     public function testStatic()
     {
-        $lookup = Lookup::create('123');
-        $this->assertInstanceOf(Lookup::class, $lookup);
+        $client = Client::create('123');
+        $this->assertInstanceOf(client::class, $client);
     }
 }
 

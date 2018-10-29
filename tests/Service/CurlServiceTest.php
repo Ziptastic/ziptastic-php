@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Ziptastic\Ziptastic\Exception;
+use Ziptastic\Exception;
 
 class CurlServiceTest extends TestCase
 {
@@ -64,7 +64,7 @@ class CurlServiceTest extends TestCase
     }
 }
 
-class curlservicestub extends Ziptastic\Ziptastic\Service\CurlService
+class curlservicestub extends Ziptastic\Service\CurlService
 {
     private $res;
     private $statusCode;

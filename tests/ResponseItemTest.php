@@ -1,9 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Ziptastic\Ziptastic\LookupModel;
+use Ziptastic\ResponseItem;
 
-class LookupModelTest extends TestCase
+class ResponseItemTest extends TestCase
 {
     public function testConstructor()
     {
@@ -18,7 +18,7 @@ class LookupModelTest extends TestCase
             'timezone' => 'America/Detroit'
         ];
 
-        $model = new LookupModel($data);
+        $model = new ResponseItem($data);
 
         $this->assertEquals($model->county(), $data['county']);
         $this->assertEquals($model->city(), $data['city']);
@@ -34,7 +34,7 @@ class LookupModelTest extends TestCase
 
     public function testNullConstructor()
     {
-        $model = new LookupModel([]);
+        $model = new ResponseItem([]);
         $this->assertNull($model->county());
         $this->assertNull($model->city());
         $this->assertNull($model->state());
