@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ziptastic;
 
 /**
@@ -24,7 +26,12 @@ class ResponseItem
         ];
 
         if ($this->data['timezone']) {
-            $this->data['timezone'] = new \DateTimeZone($this->data['timezone']);
+            // If the timezone is not valid, keep null.
+            try {
+                $this->data['timezone'] = new \DateTimeZone($this->data['timezone']);
+            } catch (\Exception $e) {
+                $this->data['timezone'] = null;
+            }
         }
     }
 

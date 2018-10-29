@@ -44,4 +44,13 @@ class ResponseItemTest extends TestCase
         $this->assertNull($model->longitude());
         $this->assertNull($model->timezone());
     }
+
+    public function testInvalidTimezone()
+    {
+        $model = new ResponseItem([
+            'timezone' => 'n/a'
+        ]);
+
+        $this->assertNull($model->timezone());
+    }
 }

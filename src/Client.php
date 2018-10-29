@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ziptastic;
 
 use Http\Client\HttpClient;
@@ -43,7 +45,8 @@ class Client
     private $countryCode;
 
     /**
-     * @param HttpClient $service
+     * @param HttpClient $http An HTTP Client implementation.
+     * @param MessageFactory $messageFactory An HTTP message factory implementation.
      * @param string|null $apiKey API Key (For non-free accounts)
      * @param string|null $countryCode 2-character country code. Currently only
      *        supports "US"
@@ -102,7 +105,7 @@ class Client
         $url = sprintf(
             self::ZIPTASTIC_LOOKUP_URL,
             $this->countryCode,
-            (string) $postalCode
+            $postalCode
         );
 
         return $this->request($url);
@@ -142,7 +145,7 @@ class Client
      * @param string $url
      * @return ResponseItem[]
      */
-    private function request(string $url)
+    private function request(string $url): array
     {
         try {
             $res = $this->http->sendRequest(
