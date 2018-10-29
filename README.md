@@ -48,22 +48,22 @@ $result = $z->forward(48038);
 $result = $z->reverse(42.331427, -83.0457538, 1000);
 ```
 
-Results are returned as a collection of class LookupModel:
+Results are returned as a list of arrays:
 
 ```php
 <?php
 
 $lookup = current($result);
-echo $lookup->county(); // Macomb
-echo $lookup->city(); // Clinton Township
-echo $lookup->state(); // Michigan
-echo $lookup->stateShort(); // MI
-echo $lookup->postalCode(); // 48038
-echo $lookup->latitude(); // 42.5868882
-echo $lookup->longitude(); // -82.9195514
+echo $lookup['county']; // Macomb
+echo $lookup['city']; // Clinton Township
+echo $lookup['state']; // Michigan
+echo $lookup['state_short']; // MI
+echo $lookup['postal_code']; // 48038
+echo $lookup['latitude']; // 42.5868882
+echo $lookup['longitude']; // -82.9195514
 
-// timezone() returns an instance of \DateTimeZone
-echo $lookup->timezone()->getName(); // America/Detroit
+// Timezones are represented by an instance of \DateTimeZone
+echo $lookup['timezone']->getName(); // America/Detroit
 ```
 
 ### PHP 5

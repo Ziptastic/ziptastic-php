@@ -24,17 +24,7 @@ class IntegrationTest extends TestCase
         $lookup = Client::create($this->apiKey);
         $l = $lookup->forward(48038);
 
-        foreach ($l as $model) {
-            $this->assertInternalType('string', $model->county());
-            $this->assertInternalType('string', $model->city());
-            $this->assertInternalType('string', $model->state());
-            $this->assertInternalType('string', $model->stateShort());
-            $this->assertInternalType('string', $model->postalCode());
-            $this->assertInternalType('double', $model->latitude());
-            $this->assertInternalType('double', $model->longitude());
-
-            $this->assertInstanceOf(\DateTimeZone::class, $model->timezone());
-        }
+        $this->assertResult($l);
     }
 
     public function testReverseLookup()
@@ -42,17 +32,7 @@ class IntegrationTest extends TestCase
         $lookup = Client::create($this->apiKey);
         $l = $lookup->reverse(42.331427, -83.0457538, 1000);
 
-        foreach ($l as $model) {
-            $this->assertInternalType('string', $model->county());
-            $this->assertInternalType('string', $model->city());
-            $this->assertInternalType('string', $model->state());
-            $this->assertInternalType('string', $model->stateShort());
-            $this->assertInternalType('string', $model->postalCode());
-            $this->assertInternalType('double', $model->latitude());
-            $this->assertInternalType('double', $model->longitude());
-
-            $this->assertInstanceOf(\DateTimeZone::class, $model->timezone());
-        }
+        $this->assertResult($l);
     }
 
     /**
@@ -62,5 +42,20 @@ class IntegrationTest extends TestCase
     {
         $lookup = Client::create($this->apiKey);
         $lookup->forward('hello');
+    }
+
+    private function assertResult(array $l)
+    {
+        foreach ($l as $model) {
+            $this->assertInternalType('string', $model['county']);
+            $this->assertInternalType('string', $model['city']);
+            $this->assertInternalType('string', $model['state']);
+            $this->assertInternalType('string', $model['state_short']);
+            $this->assertInternalType('string', $model['postal_code']);
+            $this->assertInternalType('double', $model['latitude']);
+            $this->assertInternalType('double', $model['longitude']);
+
+            $this->assertInstanceOf(\DateTimeZone::class, $model['timezone']);
+        }
     }
 }

@@ -98,7 +98,7 @@ class Client
      * ```
      *
      * @param string $zipCode The lookup postal code.
-     * @return ResponseItem[]
+     * @return array[] A list of arrays containing locale data.
      */
     public function forward(string $postalCode): array
     {
@@ -116,7 +116,7 @@ class Client
      *
      * Example:
      * ```
-     * $result = $ziptastic->reverse(42.331427, -83.0457538, 1000);
+     * $result = $ziptastic->reverse(42.331427, -83.0457538);
      * foreach ($result as $item) {
      *     echo $item->postalCode() . PHP_EOL;
      * }
@@ -125,7 +125,7 @@ class Client
      * @param float $latitude The lookup centerpoint latitude.
      * @param float $longitude The lookup centerpoint longitude.
      * @param integer $radius The search radius, in meters. Defaults to `1000`.
-     * @return ResponseItem[]
+     * @return array[] A list of arrays containing locale data.
      */
     public function reverse(float $latitude, float $longitude, int $radius = 1000): array
     {
@@ -143,7 +143,7 @@ class Client
      * Make a request to a given URI with the ziptastic API key.
      *
      * @param string $url
-     * @return ResponseItem[]
+     * @return array[] A list of arrays containing locale data.
      */
     private function request(string $url): array
     {
@@ -169,7 +169,15 @@ class Client
 
         $collection = [];
         foreach ($body as $result) {
-            $collection[] = new ResponseItem($result);
+            // If the timezone is not valid, keep null.
+            try {
+                $result['timezone'] = new \DateTimeZone($result['timezone']);
+            } catch (\Exception $e) {
+                $result['timezone'] = null;
+            }
+
+            $collection[] = $result;
+
         }
 
         return $collection;

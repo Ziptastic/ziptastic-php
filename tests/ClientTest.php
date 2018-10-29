@@ -36,14 +36,14 @@ class ClientTest extends TestCase
     {
         $l = $this->client->forward(48038);
 
-        $this->assertEquals($this->stub['city'], $l[0]->city());
+        $this->assertEquals($this->stub['city'], $l[0]['city']);
     }
 
     public function testReverse()
     {
         $l = $this->client->reverse(100.10, 200.20, 1);
 
-        $this->assertEquals($this->stub['city'], $l[0]->city());
+        $this->assertEquals($this->stub['city'], $l[0]['city']);
     }
 
     public function testCollection()
@@ -51,8 +51,8 @@ class ClientTest extends TestCase
         $l = $this->client->forward(48038);
 
         $this->assertEquals(2, count($l));
-        $this->assertEquals($this->stub['city'], $l[0]->city());
-        $this->assertEquals($this->stub['city'], $l[1]->city());
+        $this->assertEquals($this->stub['city'], $l[0]['city']);
+        $this->assertEquals($this->stub['city'], $l[1]['city']);
     }
 
     public function testStatic()
