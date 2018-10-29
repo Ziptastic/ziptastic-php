@@ -3,6 +3,9 @@
 use PHPUnit\Framework\TestCase;
 use Ziptastic\Client;
 
+/**
+ * @group integration
+ */
 class IntegrationTest extends TestCase
 {
     private $apiKey;
@@ -36,8 +39,6 @@ class IntegrationTest extends TestCase
 
     public function testReverseLookup()
     {
-        $this->markTestSkipped('404 for some reason.');
-
         $lookup = Client::create($this->apiKey);
         $l = $lookup->reverse(42.331427, -83.0457538, 1000);
 
@@ -52,5 +53,14 @@ class IntegrationTest extends TestCase
 
             $this->assertInstanceOf(\DateTimeZone::class, $model->timezone());
         }
+    }
+
+    /**
+     * @expectedException Ziptastic\Exception
+     */
+    public function testException()
+    {
+        $lookup = Client::create($this->apiKey);
+        $lookup->forward('hello');
     }
 }

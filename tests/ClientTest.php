@@ -1,11 +1,17 @@
 <?php
 
+use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Psr7\Response;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Mock\Client as MockClient;
 use PHPUnit\Framework\TestCase;
+
 use Ziptastic\Client;
-use Ziptastic\Service\ServiceInterface;
 
 class ClientTest extends TestCase
 {
+    private $client;
+
     private $stub = [
         'county' => 'Macomb',
         'city' => 'Clinton Township',
@@ -17,46 +23,32 @@ class ClientTest extends TestCase
         'timezone' => 'America/Detroit'
     ];
 
-    public function testFormward()
+    public function setUp()
     {
-        $res = function() {
-            return [$this->stub];
-        };
+        $http = new MockClient;
+        $response = new Response(200, [], stream_for(json_encode([$this->stub, $this->stub])));
+        $http->setDefaultResponse($response);
 
-        $service = new servicestub($res);
+        $this->client = new Client($http, MessageFactoryDiscovery::find(), '123');
+    }
 
-        $client = new Client($service, '123');
-        $l = $client->forward(48038);
+    public function testForward()
+    {
+        $l = $this->client->forward(48038);
 
-        $this->assertEquals(1, count($l));
         $this->assertEquals($this->stub['city'], $l[0]->city());
     }
 
     public function testReverse()
     {
-        $res = function() {
-            return [$this->stub];
-        };
+        $l = $this->client->reverse(100.10, 200.20, 1);
 
-        $service = new servicestub($res);
-
-        $client = new Client($service, '123');
-        $l = $client->reverse(100.10, 200.20, 1);
-
-        $this->assertEquals(1, count($l));
         $this->assertEquals($this->stub['city'], $l[0]->city());
     }
 
     public function testCollection()
     {
-        $res = function() {
-            return [$this->stub, $this->stub];
-        };
-
-        $service = new servicestub($res);
-
-        $client = new Client($service, '123');
-        $l = $client->forward(48038);
+        $l = $this->client->forward(48038);
 
         $this->assertEquals(2, count($l));
         $this->assertEquals($this->stub['city'], $l[0]->city());
@@ -66,21 +58,6 @@ class ClientTest extends TestCase
     public function testStatic()
     {
         $client = Client::create('123');
-        $this->assertInstanceOf(client::class, $client);
-    }
-}
-
-class servicestub implements ServiceInterface
-{
-    private $res;
-
-    public function __construct(callable $res)
-    {
-        $this->res = $res;
-    }
-
-    public function get($url, $headers)
-    {
-        return call_user_func($this->res);
+        $this->assertInstanceOf(Client::class, $client);
     }
 }

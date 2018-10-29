@@ -2,18 +2,35 @@
 
 namespace Ziptastic;
 
-use Ziptastic\Service\CurlService;
-use Ziptastic\Service\ServiceInterface;
+use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\MessageFactory;
 
+/**
+ * The Ziptastic API class.
+ *
+ * Example:
+ * ```
+ * use Ziptastic\Client;
+ *
+ * $ziptastic = Client::create($myApiKey);
+ * ```
+ */
 class Client
 {
-    const ZIPTASTIC_LOOKUP_URL = 'https://zip.getziptastic.com/v3/%s/%s/';
-    const ZIPTASTIC_REVERSE_URL = 'https://zip.getziptastic.com/v3/reverse/%s/%s/%s/';
+    const ZIPTASTIC_LOOKUP_URL = 'https://zip.getziptastic.com/v3/%s/%s';
+    const ZIPTASTIC_REVERSE_URL = 'https://zip.getziptastic.com/v3/reverse/%s/%s/%s';
 
     /**
-     * @var ServiceInterface;
+     * @var HttpClient;
      */
-    private $service;
+    private $http;
+
+    /**
+     * @var MessageFactory
+     */
+    private $messageFactory;
 
     /**
      * @var string
@@ -26,38 +43,56 @@ class Client
     private $countryCode;
 
     /**
-     * @param ServiceInterface $service
+     * @param HttpClient $service
      * @param string|null $apiKey API Key (For non-free accounts)
      * @param string|null $countryCode 2-character country code. Currently only
      *        supports "US"
      */
     public function __construct(
-        ServiceInterface $service,
+        HttpClient $http,
+        MessageFactory $messageFactory,
         string $apiKey = null,
         string $countryCode = 'US'
     ) {
-        $this->service = $service;
+        $this->http = $http;
+        $this->messageFactory = $messageFactory;
         $this->apiKey = $apiKey;
         $this->countryCode = $countryCode;
     }
 
     /**
-     * Create a client instance with the default service.
+     * Create a client instance with the default HTTP handler.
      *
-     * @param string|null $apiKey
-     * @param string|null $countryCode
-     * @return Lookup
+     * Example:
+     * ```
+     * $ziptastic = Client::create($myApiKey);
+     * ```
+     *
+     * @param string|null $apiKey API Key (For non-free accounts)
+     * @param string|null $countryCode 2-character country code. Currently only
+     *        supports "US"
+     * @return Client
      */
     public static function create(
         string $apiKey = null,
         string $countryCode = 'US'
     ): self {
-        $service = new CurlService;
-        return new self($service, $apiKey, $countryCode);
+        $http = HttpClientDiscovery::find();
+        $messageFactory = MessageFactoryDiscovery::find();
+
+        return new self($http, $messageFactory, $apiKey, $countryCode);
     }
 
     /**
      * Lookup locale information by a postal code.
+     *
+     * Example:
+     * ```
+     * $result = $ziptastic->forward('48226');
+     * foreach ($result as $item) {
+     *     echo $item->postalCode() . PHP_EOL;
+     * }
+     * ```
      *
      * @param string $zipCode The lookup postal code.
      * @return ResponseItem[]
@@ -76,12 +111,20 @@ class Client
     /**
      * Lookup locale information by a set of coordinates.
      *
+     * Example:
+     * ```
+     * $result = $ziptastic->reverse(42.331427, -83.0457538, 1000);
+     * foreach ($result as $item) {
+     *     echo $item->postalCode() . PHP_EOL;
+     * }
+     * ```
+     *
      * @param float $latitude The lookup centerpoint latitude.
      * @param float $longitude The lookup centerpoint longitude.
-     * @param integer $radius The search radius, in meters.
+     * @param integer $radius The search radius, in meters. Defaults to `1000`.
      * @return ResponseItem[]
      */
-    public function reverse(float $latitude, float $longitude, int $radius): array
+    public function reverse(float $latitude, float $longitude, int $radius = 1000): array
     {
         $url = sprintf(
             self::ZIPTASTIC_REVERSE_URL,
@@ -101,10 +144,28 @@ class Client
      */
     private function request(string $url)
     {
-        $res = $this->service->get($url, $this->apiKey);
+        try {
+            $res = $this->http->sendRequest(
+                $this->messageFactory->createRequest('GET', $url, [
+                    'x-key' => $this->apiKey
+                ])
+            );
+        } catch (\Exception $e) {
+            throw new Exception('An error occurred: '. $e->getMessage(), $e->getCode(), $e);
+        }
+
+        $body = json_decode($res->getBody()->getContents(), true);
+
+        if ($res->getStatusCode() !== 200) {
+            $message = isset($body['message'])
+                ? $body['message']
+                : 'An error occurred';
+
+            throw new Exception($message, $res->getStatusCode());
+        }
 
         $collection = [];
-        foreach ($res as $result) {
+        foreach ($body as $result) {
             $collection[] = new ResponseItem($result);
         }
 

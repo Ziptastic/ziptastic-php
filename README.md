@@ -16,7 +16,13 @@ composer require ziptastic/ziptastic
 
 ## Usage
 
-The simplest usage defaults to the provided Curl service:
+Ziptastic PHP relies on [HTTPlug](http://httplug.io/) to make API requests.
+HTTPlug is an abstraction which allows you to choose from any one of a large
+number of HTTP clients, including the client you might already have installed.
+
+For more information on getting started with HTTPlug, please refer to the
+[HTTPlug for library users](http://docs.php-http.org/en/latest/httplug/users.html)
+documentation.
 
 ```php
 <?php
@@ -26,20 +32,6 @@ include "vendor/autoload.php";
 use Ziptastic\Client;
 
 $z = Client::create(getenv('ZIPTASTIC_API_KEY'));
-```
-
-You can also use a normal instantiation technique:
-
-```php
-<?php
-
-include "vendor/autoload.php";
-
-use Ziptastic\Client;
-use Ziptastic\Service\CurlService;
-
-$service = new Ziptastic\Service\CurlService;
-$z = new Client($service, getenv('ZIPTASTIC_API_KEY'));
 ```
 
 Ziptastic provides two API methods: Lookup by a postal code (forward lookup),
