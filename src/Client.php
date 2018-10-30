@@ -47,14 +47,14 @@ class Client
     /**
      * @param HttpClient $http An HTTP Client implementation.
      * @param MessageFactory $messageFactory An HTTP message factory implementation.
-     * @param string|null $apiKey API Key (For non-free accounts)
+     * @param string $apiKey Ziptastic API Key.
      * @param string|null $countryCode 2-character country code. Currently only
-     *        supports "US"
+     *        supports "US".
      */
     public function __construct(
         HttpClient $http,
         MessageFactory $messageFactory,
-        string $apiKey = null,
+        string $apiKey,
         string $countryCode = 'US'
     ) {
         $this->http = $http;
@@ -71,13 +71,13 @@ class Client
      * $ziptastic = Client::create($myApiKey);
      * ```
      *
-     * @param string|null $apiKey API Key (For non-free accounts)
+     * @param string $apiKey Ziptastic API Key.
      * @param string|null $countryCode 2-character country code. Currently only
-     *        supports "US"
+     *        supports "US".
      * @return Client
      */
     public static function create(
-        string $apiKey = null,
+        string $apiKey,
         string $countryCode = 'US'
     ): self {
         $http = HttpClientDiscovery::find();
