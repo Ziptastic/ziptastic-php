@@ -1,4 +1,9 @@
-<?php namespace Ziptastic\Ziptastic;
+<?php
 
-class Exception extends \Exception
+namespace Ziptastic;
+
+/**
+ * Represents an error case in the Ziptastic API.
+ */
+class Exception extends \RuntimeException
 {}
